@@ -1,0 +1,32 @@
+{
+  "name": "socialnetdemo-backend",
+  "version": "1.0.0",
+  "description": "Backend Social Net Demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbenavv-prog/socialNetDemo-backend.git"
+  },
+  "author": "Julian Benavides",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbenavv-prog/socialNetDemo-backend/issues"
+  },
+  "homepage": "https://github.com/jbenavv-prog/socialNetDemo-backend#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "config.json": "^0.0.4",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "googleapis": "^101.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment-timezone": "^0.5.34",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^2.0.16",
+    "pg": "^8.7.3",
+    "stream": "^0.0.2"
+  }
+}
