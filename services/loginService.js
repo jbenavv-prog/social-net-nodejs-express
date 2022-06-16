@@ -3,6 +3,7 @@ const dateUtils = require('../util/dates/dateUtils');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { password } = require('pg/lib/defaults');
+const { log } = require('console');
 
 class LoginService {
     constructor() {

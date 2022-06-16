@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 app.use((req, res, next) => {
     let allowedOrigins = [
         "http://localhost:4200",
+        "http://localhost:8080",
     ];
 
     let origin = req.headers.origin;
