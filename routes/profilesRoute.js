@@ -1,5 +1,6 @@
 const express = require('express');
 const multer = require('multer');
+const auth = require('../util/middleware/auth');
 const createFile = require('../util/googleDrive/createFile');
 const ProfileService = require('../services/profileService');
 const PublicationService = require('../services/publicationService');
@@ -16,6 +17,7 @@ const profilesApi = (app) => {
     app.use('/api/profiles', router);
 
     router.post('/getProfile', getProfile);
+    router.post('/getOwnProfile', auth, getOwnProfile);
     router.post('/updatePhotoProfile', upload.any(), updatePhotoProfile);
     router.post('/updateDetails', updateDetails);
 
@@ -31,6 +33,25 @@ async function getProfile(req, res, next) {
             ok: true,
             message: `success`,
             data: profile
+        });
+
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+async function getOwnProfile(req, res, next) {
+    let { user } = req;
+
+    try {
+        const profile = await profileService.getByUserSub(user) || {};
+
+        return res.status(200).json({
+            ok: true,
+            message: `success`,
+            data: {
+                ...profile
+            }
         });
 
     } catch (err) {

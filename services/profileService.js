@@ -21,6 +21,13 @@ class ProfileService {
         return result;
     }
 
+    async getByUserSub({ sub: idAccount }) {
+        const sql = `select * from "Profiles" where "idAccount" = '${idAccount}';`;
+        const [result] = await this.sqlServerLib.executeSqlAsync(sql);
+        return result;
+    }
+
+
     async updatePhotoProfile(photoProfileURL, { id: idAccount }) {
         const sql = `update "Profiles"
         SET "photoProfileURL"='${photoProfileURL}'

@@ -1,4 +1,6 @@
 const express = require("express");
+const auth = require("../util/middleware/auth");
+
 const LoginService = require("../services/loginService");
 const ProfileService = require("../services/profileService");
 
@@ -12,6 +14,7 @@ const loginApi = (app) => {
 
   router.post("/authenticate", authenticate);
   router.post("/register", register);
+  router.post("/user", auth, getUser);
 };
 
 async function authenticate(req, res, next) {
@@ -34,6 +37,9 @@ async function authenticate(req, res, next) {
         message: `Autenticación fallida`,
       });
     }
+
+    await loginService.saveToken(userDB, token);
+
     return res.status(200).json({
       ok: true,
       message: `success`,
@@ -71,6 +77,12 @@ async function register(req, res, next) {
 
     (await profileService.create(idNewUser, user)) || {};
 
+    const token = jwt.sign({ sub: idNewUser }, process.env.TOKEN_KEY, {
+      expiresIn: "7d",
+    });
+
+    await loginService.saveToken(idNewUser, token);
+
     return res.status(200).json({
       ok: true,
       message: `success`,
@@ -78,6 +90,31 @@ async function register(req, res, next) {
   } catch (err) {
     console.log(err);
     return res.status(500).json({});
+  }
+}
+
+async function getUser(req, res, next) {
+  const user = req.user;
+
+  try {
+    const result = (await loginService.getUserById(user)) || null;
+
+    if (!result) {
+      return res.status(200).json({
+        ok: false,
+        message: `Usuario no encontrado`,
+      });
+    }
+
+    return res.status(200).json({
+      ok: true,
+      message: `success`,
+      data: {
+        ...result,
+      },
+    });
+  } catch (error) {
+    console.log(error);
   }
 }
 
