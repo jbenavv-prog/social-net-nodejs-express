@@ -91,7 +91,7 @@ async function getPublicationsByUser(req, res, next) {
 }
 
 async function createReaction(req, res, next) {
-    const { reaction, user } = req.body.request;
+    const { reaction, user } = req.body;
     try {
 
         const { id: idPreviousReaction } = await reactionService.getByPublication(reaction, user) || {}
@@ -112,7 +112,8 @@ async function createReaction(req, res, next) {
 }
 
 async function createComment(req, res, next) {
-    const { comment, user } = req.body.request;
+    console.log
+    const { comment, user } = req.body;
     try {
         const { id: idComment } = await commentService.create(comment, user) || {};
 
