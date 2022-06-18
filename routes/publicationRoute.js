@@ -25,17 +25,18 @@ const publicationApi = (app) => {
 }
 
 async function create(req, res, next) {
-    const { query: user, files: images, body: formData } = req;
+
+    const {files: images, body: formData } = req
     let imageURL = '';
     const rootFolder = '11BkDnukd_PgtX_Cft-t4Iv-2UXeakEn0';
 
     try {
         if (images[0]) {
-            const { id: idImage, webViewLink, webContentLink } = await createFile(rootFolder, images[0]);
+            const { webContentLink } = await createFile(rootFolder, images[0]);
             imageURL = webContentLink;
         }
 
-        const { id: idPublication } = await publicationService.create(user, formData, imageURL) || {};
+        const { id: idPublication } = await publicationService.create(formData, imageURL) || {};
 
         if (!idPublication) {
             return res.status(200).json({

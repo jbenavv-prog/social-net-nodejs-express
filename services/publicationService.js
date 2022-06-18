@@ -1,22 +1,25 @@
-const SqlServerLib = require('../lib/postgresdb');
-const dateUtils = require('../util/dates/dateUtils');
+const SqlServerLib = require("../lib/postgresdb");
+const dateUtils = require("../util/dates/dateUtils");
 
 class PublicationService {
-    constructor() {
-        this.sqlServerLib = new SqlServerLib();
-    }
+  constructor() {
+    this.sqlServerLib = new SqlServerLib();
+  }
 
-    async create({ id: idAccount, idTypePublication }, { description }, imageURL) {
-        const sql = `insert into "Publications"(
+  async create({ user, idTypePublication, description }, imageURL) {
+    user = JSON.parse(user);
+    const idAccount = user.id;
+    console.log(user);
+    const sql = `insert into "Publications"(
             "idAccount", description, "imageURL", date, "idTypePublication", "isActive")
             values ('${idAccount}', '${description}', '${imageURL}', '${dateUtils.getFecha()}', '${idTypePublication}', B'${1}')
             returning *;`;
-        const [result] = await this.sqlServerLib.executeSqlAsync(sql);
-        return result;
-    }
+    const [result] = await this.sqlServerLib.executeSqlAsync(sql);
+    return result;
+  }
 
-    async getPublications() {
-        const sql = `select a.id as "idPublication",
+  async getPublications() {
+    const sql = `select a.id as "idPublication",
         a.description,
         a."imageURL",
         a.date, a."idTypePublication",
@@ -29,12 +32,12 @@ class PublicationService {
         from "Publications" a, "Profiles" b
         where a."idAccount" = b."idAccount"
         order by "idPublication" desc;`;
-        const result = await this.sqlServerLib.executeSqlAsync(sql);
-        return result;
-    }
+    const result = await this.sqlServerLib.executeSqlAsync(sql);
+    return result;
+  }
 
-    async getPublicationsByUser({ id: idAccount }) {
-        const sql = `select a.id as "idPublication",
+  async getPublicationsByUser({ id: idAccount }) {
+    const sql = `select a.id as "idPublication",
         a.description,
         a."imageURL",
         a.date, a."idTypePublication",
@@ -47,9 +50,9 @@ class PublicationService {
         from "Publications" a, "Profiles" b
         where a."idAccount" = b."idAccount" and a."idAccount" = '${idAccount}'
         order by "idPublication" desc;`;
-        const result = await this.sqlServerLib.executeSqlAsync(sql);
-        return result;
-    }
+    const result = await this.sqlServerLib.executeSqlAsync(sql);
+    return result;
+  }
 }
 
 module.exports = PublicationService;
